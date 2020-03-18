@@ -3,6 +3,7 @@ import fakeData from '../../fakeData';
 import './Shop.css';
 import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
+import { addToDatabaseCart } from '../../utilities/databaseManager';
 
 const Shop = () => {
     // console.log(fakeData);
@@ -13,13 +14,16 @@ const Shop = () => {
         console.log("product added",product);
         const newCart=[...cart,product];
         setCart(newCart);
+        const sameData=newCart.filter(pd=>pd.key===product.key)
+        const count=sameData.length;
+        addToDatabaseCart(product.key,count)
  
     }
     
  
     return (
           
-        <div className="shop-container">
+        <div className="twin-component">
              {/* <h1>This is shop</h1>
             <h3>{products.length}</h3> */}
             <div className="product-container">
@@ -27,6 +31,8 @@ const Shop = () => {
                 {
                     // products.map(products=><Product><li>{products.name}</li></Product>)
                     products.map(pd=><Product 
+                        key={pd.key}
+                        showAddToCart={true}
                         handleAddProduct={handleAddProduct}
                         product={pd}>
                         </Product>)
